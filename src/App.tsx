@@ -1,8 +1,9 @@
-
+import React from "react";
+import NewAccount from "./Pages/NewAccount";
 function App() {
   return (
     <>
-      <p className="p-4 bg-slate-500">Hello World</p>
+      <NewAccount></NewAccount>
     </>
   );
 }
