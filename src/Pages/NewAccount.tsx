@@ -1,7 +1,7 @@
 // import { url } from "inspector";
 import React from "react";
-import "../styles/NewAccount.css"
 import NewAccPageIm from "../Imgs/NewAccPageIm.png";
+import NewAccountCreate from "../Components/NewAccountCreate";
 
 function NewAccount() {
   return (
@@ -26,9 +26,9 @@ function NewAccount() {
               Let’s get you all set up so you can verify your personal account
               and begin setting up your resume.
             </p>
-
+          <NewAccountCreate/>
             {/* form  */}
-            <form className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+            {/* <form className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
               <div>
                 <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
                   First Name
@@ -125,7 +125,7 @@ function NewAccount() {
                   />
                 </svg>
               </button>
-            </form>
+            </form> */}
           </div>
         </div>
       </div>
