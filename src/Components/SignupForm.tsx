@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 
-interface FormData {
+interface SignupFormData {
   firstName: string;
   lastName: string;
   gender: string;
@@ -10,7 +10,7 @@ interface FormData {
   confirmPassword: string;
 }
 
-function NewAccountCreate() {
+function SignupForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
@@ -22,7 +22,6 @@ function NewAccountCreate() {
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (
       !firstName ||
       !lastName ||
@@ -32,29 +31,47 @@ function NewAccountCreate() {
       !confirmPassword
     ) {
       // Handle the case when any field is empty
-      console.log("Please fill in all the fields");
+      console.log("*Please fill in all the fields");
       return;
     }
 
     if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
+      setPasswordError("*Passwords do not match");
       return;
     }
 
     if (password.length < 8) {
-      setPasswordError("Password should be at least 8 characters long");
+      setPasswordError("*Password should be at least 8 characters long");
       return;
     }
 
-    const lowercaseEmail = email.toLowerCase();
-    const lowercaseSuffix = "@atdstudent.cui.edu.pk";
+    // Password validation regex patterns
+    const uppercaseRegex = /^(?=.[A-Z])/;
+    const numberRegex = /^(?=.\d)/;
+    const specialCharRegex = /^(?=.[!@#$%^&])/;
+
+    // Check if the password meets the criteria
+    if (
+      !uppercaseRegex.test(password) ||
+      !numberRegex.test(password) ||
+      !specialCharRegex.test(password)
+    ) {
+      console.log(specialCharRegex.test(password));
+      setPasswordError(
+        "*Password must contain at least one uppercase letter, one number, and one special character"
+      );
+      return;
+    }
+
+    const lowercaseEmail = email.toLowerCase().trim();
+    const lowercaseSuffix = "@cuiatd.edu.pk";
 
     if (!lowercaseEmail.endsWith(lowercaseSuffix)) {
-      setEmailError("Email should end with @atdstudent.cui.edu.pk");
+      setEmailError("*Email should end with @cuiatd.edu.pk");
       return;
     }
 
-    const formData: FormData = {
+    const formData: SignupFormData = {
       firstName,
       lastName,
       gender,
@@ -76,6 +93,7 @@ function NewAccountCreate() {
     setPasswordError("");
   };
 
+  // Input Fields Handlers
   const handleFirstNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -146,7 +164,7 @@ function NewAccountCreate() {
             Gender
           </label>
           <select
-            id="gender" 
+            id="gender"
             className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
             value={gender}
             onChange={handleGenderChange}
@@ -230,4 +248,4 @@ function NewAccountCreate() {
   );
 }
 
-export default NewAccountCreate;
+export default SignupForm;

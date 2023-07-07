@@ -3,7 +3,7 @@ import NewAccount from "./Pages/NewAccount";
 function App() {
   return (
     <>
-      <NewAccount></NewAccount>
+      <NewAccount />
     </>
   );
 }
