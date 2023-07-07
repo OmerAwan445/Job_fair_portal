@@ -17,7 +17,7 @@ function SignUp() {
 
         <div className="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5">
           <div className="w-full">
-            <h1 className="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
+            <h1 className="text-2xl font-semibold tracking-wider text-blue-500 capitalize dark:text-white">
               Create A New Account
             </h1>
 
@@ -26,7 +26,7 @@ function SignUp() {
               and begin setting up your resume.
             </p>
             {/* form  */}
-          <SignUpForm/>
+            <SignUpForm />
           </div>
         </div>
       </div>

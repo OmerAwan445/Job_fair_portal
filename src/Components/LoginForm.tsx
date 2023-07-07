@@ -47,7 +47,9 @@ function LoginForm() {
       action=""
       className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
     >
-      <p className="text-center text-lg font-medium">Login in to your account</p>
+      <p className="text-center  font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
+        Login in to your account
+      </p>
       {errorMessage && (
         <span className="text-red-500 pl-2 text-sm">*{errorMessage}</span>
       )}
@@ -55,7 +57,7 @@ function LoginForm() {
         <div className="relative">
           <input
             type="email"
-            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-md"
+            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
             placeholder="Enter email"
             ref={emailRef}
           />
@@ -63,14 +65,16 @@ function LoginForm() {
       </div>
 
       <div>
-        <label htmlFor="password" className="sr-only">Password</label>
+        <label htmlFor="password" className="sr-only">
+          Password
+        </label>
         <div className="relative">
           <input
-            name='password'
-            id='password'
+            name="password"
+            id="password"
             type="password"
-            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-md"
-            placeholder="Enter password"
+            placeholder="Password"
+            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
             ref={passwordRef}
           />
         </div>
@@ -78,18 +82,20 @@ function LoginForm() {
 
       <button
         type="submit"
-        className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+        className=" text-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
         onClick={handleLogin}
       >
-        {isLoading ? <Spinner /> : 'Login in'}
+        {isLoading ? <Spinner /> : "Login in"}
       </button>
 
       <p className="text-center text-sm text-gray-500">
         No account?&nbsp;
-        <Link className="underline text-blue-400" to='/sign-up'>Sign up</Link>
+        <Link className="underline text-blue-400" to="/sign-up">
+          Sign up
+        </Link>
       </p>
     </form>
-  )
+  );
 }
 
 export default LoginForm;

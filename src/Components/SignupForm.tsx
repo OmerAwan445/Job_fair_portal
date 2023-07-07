@@ -21,7 +21,7 @@ function SignUpForm() {
   const [genderError, setGenderError] = useState("");
 
 // Loading state
-   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
    // response states
   const [responseStatus, setResponseStatus] = useState("");
@@ -45,6 +45,16 @@ function SignUpForm() {
   },2000)
 },[responseStatus,navigate]);
 
+// Tailwind Classes
+const tailwindLabelClasses = `block mb-2 text-sm text-gray-600 dark:text-gray-200`;
+
+  const tailwindInputClasses = `block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40`;
+
+  const tailwindBtnClasses = `flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50`;
+
+
+
+
 // formHandler ==========================
  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,7 +68,7 @@ function SignUpForm() {
     ) {
       // Handle the case when any field is empty
       console.log("*Please fill in all the fields");
-       setGenderError("Please select a gender");
+      setGenderError("Please select a gender");
       return;
     }else {
       setGenderError("");
@@ -161,27 +171,16 @@ function SignUpForm() {
 
   return (
     <div>
-      {responseMessage && (
-        <div
-          className={`${
-            responseStatus === "Error" ? "bg-red-600" : "bg-green-600"
-          } absolute top-0 w-32 mx-auto`}
-        >
-          <h3>{responseMessage}</h3>
-        </div>
-      )}
       <form
         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2"
         onSubmit={handleFormSubmit}
       >
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            First Name
-          </label>
+          <label className={tailwindLabelClasses}>First Name</label>
           <input
             type="text"
             placeholder="John"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={firstName}
             onChange={handleFirstNameChange}
             required
@@ -189,13 +188,11 @@ function SignUpForm() {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Last name
-          </label>
+          <label className={tailwindLabelClasses}>Last name</label>
           <input
             type="text"
             placeholder="Snow"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={lastName}
             onChange={handleLastNameChange}
             required
@@ -203,15 +200,12 @@ function SignUpForm() {
         </div>
 
         <div>
-          <label
-            htmlFor="gender"
-            className="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-          >
+          <label htmlFor="gender" className={tailwindLabelClasses}>
             Gender
           </label>
           <select
             id="gender"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={gender}
             onChange={handleGenderChange}
             required
@@ -226,13 +220,11 @@ function SignUpForm() {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Email address
-          </label>
+          <label className={tailwindLabelClasses}>Email address</label>
           <input
             type="email"
             placeholder="johnsnow@atdstudent.cui.edu.pk"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={email}
             onChange={handleEmailChange}
             required
@@ -241,13 +233,11 @@ function SignUpForm() {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Password
-          </label>
+          <label className={tailwindLabelClasses}>Password</label>
           <input
             type="password"
             placeholder="Enter your password"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={password}
             onChange={handlePasswordChange}
             required
@@ -255,13 +245,11 @@ function SignUpForm() {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Confirm password
-          </label>
+          <label className={tailwindLabelClasses}>Confirm password</label>
           <input
             type="password"
             placeholder="Enter your password"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
             required
@@ -271,10 +259,7 @@ function SignUpForm() {
           )}
         </div>
 
-        <button
-          className="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-          type="submit"
-        >
+        <button className={tailwindBtnClasses} type="submit">
           <span>{isLoading ? <Spinner /> : "Sign Up"} </span>
 
           <svg
@@ -291,6 +276,15 @@ function SignUpForm() {
           </svg>
         </button>
       </form>
+      {responseMessage && (
+        <div
+          className={`${
+            responseStatus === "Error" ? "text-red-600" : "text-green-600"
+          } absolute my-2`}
+        >
+          <h3>*{responseMessage}</h3>
+        </div>
+      )}
     </div>
   );
 }
