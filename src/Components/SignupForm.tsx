@@ -4,20 +4,29 @@ import { signUpVerification } from "../utils/signUpVerification";
 import { useNavigate } from "react-router";
 
 
-function SignupForm() {
+function SignUpForm() {
+
+  // input fields states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState(-1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // error states
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  // response states
   const [responseStatus, setResponseStatus] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
+
+  
   const navigate = useNavigate();
 
 
+  // useEffect fot the response
   useEffect(()=>{
   if(responseStatus === "") return
   if(responseStatus==="Error"){
@@ -31,7 +40,7 @@ function SignupForm() {
   },2000)
 },[responseStatus,navigate]);
 
-
+// formHandler ==========================
  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (
@@ -89,11 +98,11 @@ function SignupForm() {
       email,
       password,
     };
-  // Verifiying the user data
+  // Verifying the user data
  const {status,message} = await signUpVerification(formData);
  setResponseStatus(status);
  setResponseMessage(message);
-// Ressetting all input fields ===========
+// Resetting all input fields ===========
     setFirstName("");
     setLastName("");
     setGender(-1);
@@ -263,4 +272,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default SignUpForm;
