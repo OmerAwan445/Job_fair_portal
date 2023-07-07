@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-
+import { AccountCreationVerification, NewAccountData } from "../Types";
 
 interface FormData {
   firstName: string;
   lastName: string;
-  gender: string;
+  gender: number;
   email: string;
   password: string;
   confirmPassword: string;
@@ -13,12 +13,13 @@ interface FormData {
 function NewAccountCreate() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState(-1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [genderError, setGenderError] = useState("");
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,15 +27,16 @@ function NewAccountCreate() {
     if (
       !firstName ||
       !lastName ||
-      !gender ||
+      gender === -1 ||
       !email ||
       !password ||
       !confirmPassword
     ) {
       // Handle the case when any field is empty
       console.log("Please fill in all the fields");
+      setGenderError("Please select a gender");
       return;
-    }
+    } else setGenderError("");
 
     if (password !== confirmPassword) {
       setPasswordError("Passwords do not match");
@@ -46,11 +48,28 @@ function NewAccountCreate() {
       return;
     }
 
+    // Password validation regex patterns
+    const uppercaseRegex = /^(?=.*[A-Z])/;
+    const numberRegex = /^(?=.*\d)/;
+    const specialCharRegex = /^(?=.*[!@#$%^&*])/;
+
+    // Check if the password meets the criteria
+    if (
+      !uppercaseRegex.test(password) ||
+      !numberRegex.test(password) ||
+      !specialCharRegex.test(password)
+    ) {
+      setPasswordError(
+        "Password must contain at least one uppercase letter, one number, and one special character"
+      );
+      return;
+    }
+
     const lowercaseEmail = email.toLowerCase();
-    const lowercaseSuffix = "@atdstudent.cui.edu.pk";
+    const lowercaseSuffix = "@cuiatd.edu.pk";
 
     if (!lowercaseEmail.endsWith(lowercaseSuffix)) {
-      setEmailError("Email should end with @atdstudent.cui.edu.pk");
+      setEmailError("Email should end with @cuiatd.edu.pk");
       return;
     }
 
@@ -68,7 +87,7 @@ function NewAccountCreate() {
 
     setFirstName("");
     setLastName("");
-    setGender("");
+    setGender(-1);
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -86,9 +105,12 @@ function NewAccountCreate() {
     setLastName(event.target.value);
   };
 
-  const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setGender(event.target.value);
-  };
+ const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+   const selectedGender = parseInt(event.target.value, 10);
+   setGender(selectedGender);
+   setGenderError(""); // Clear the gender error when the value changes
+ };
+
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -146,18 +168,19 @@ function NewAccountCreate() {
             Gender
           </label>
           <select
-            id="gender" 
+            id="gender"
             className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
             value={gender}
             onChange={handleGenderChange}
             required
           >
-            <option value="" disabled hidden  style={{color:"#4b5552"}}>
+            <option value="-1" disabled hidden style={{ color: "#4b5552" }}>
               Select one of the options
             </option>
             <option value="1">Male</option>
             <option value="2">Female</option>
           </select>
+          {genderError && <p className="text-red-500 mt-1">{genderError}</p>}
         </div>
 
         <div>
