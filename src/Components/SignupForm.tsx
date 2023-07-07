@@ -172,6 +172,7 @@ const tailwindLabelClasses = `block mb-2 text-sm text-gray-600 dark:text-gray-20
 
   return (
     <div>
+      {responseMessage && <div className={`${responseStatus ==="Error" ? "bg-red-600":"bg-green-600" } absolute top-0 w-32 mx-auto`}><h3>{responseMessage}</h3></div>}
       <form
         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2"
         onSubmit={handleFormSubmit}
