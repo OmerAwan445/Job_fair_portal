@@ -1,6 +1,6 @@
 export interface AccountCreationVerification{
  isCreate?: boolean;
- errorMessage?: string;   
+ errorMessage?: string;
 }
 
 
@@ -12,3 +12,10 @@ export interface NewAccountData
     email: string,
     password: string,
 }
+export interface SignupFormData {
+    firstName: string;
+    lastName: string;
+    gender: number;
+    email: string;
+    password: string;
+  }

@@ -1,33 +1,13 @@
-import axios from "axios";
-import { NewAccountData,AccountCreationVerification} from "../Types";
+import { SignupFormData } from "../Types";
 
-export async function createAccount  (newAccountData: NewAccountData,AccountCreationVerification:AccountCreationVerification)  {
- const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
+export async function AccountCreationVerification(formdata:SignupFormData){
+  const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
   try {
     if (!BASE_URL) throw new Error('No API ENDPOINT FOUND');
     const headers = {
-      'accept': '*/*',
+      'accept': 'text/plain',
       'Content-Type': 'application/json'
     };
-
-    const userData = {
-     ...newAccountData
-    };
-
-    const { data } = await axios.post(`${BASE_URL}/auth/Register`, userData, { headers });
-
-     if (data.statusCode === 401) throw new Error('Invalid email or password');    
+    const { data } = await axios.post(${BASE_URL}/auth/Register, formdata, { headers });
 }
-
-catch (error: unknown) {
-    console.error(error);
-    if (error instanceof Error) {
-      return {
-        isCreate: false,
-        errorMessage: error.message
-      };
-    } else {
-      throw error;
-    }
-  }
 }

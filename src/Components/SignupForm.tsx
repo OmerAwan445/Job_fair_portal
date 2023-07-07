@@ -1,15 +1,7 @@
 import React, { useState } from "react";
-// import { AccountCreationVerification,NewAccountData } from "../Types";
+import { SignupFormData } from "../Types";
+import { AccountCreationVerification } from "../utils/AccountCreationVerification";
 
-
-interface SignupFormData {
-  firstName: string;
-  lastName: string;
-  gender: number;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 
 function SignupForm() {
   const [firstName, setFirstName] = useState("");
@@ -26,7 +18,7 @@ function SignupForm() {
     if (
       !firstName ||
       !lastName ||
-      !gender ||
+      gender === -1 ||
       !email ||
       !password ||
       !confirmPassword
@@ -78,12 +70,13 @@ function SignupForm() {
       gender,
       email,
       password,
-      confirmPassword,
     };
 
     console.log("Form Data:", formData);
     // Perform further processing with the form data
+  AccountCreationVerification(formData);
 
+    // Ressetting all input fields
     setFirstName("");
     setLastName("");
     setGender(-1);
@@ -172,7 +165,7 @@ function SignupForm() {
             onChange={handleGenderChange}
             required
           >
-            <option value="" disabled hidden  style={{color:"#4b5552"}}>
+            <option value="-1" disabled hidden  style={{color:"#4b5552"}}>
               Select one of the options
             </option>
             <option value="1">Male</option>
