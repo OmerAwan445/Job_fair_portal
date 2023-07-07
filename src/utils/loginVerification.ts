@@ -21,7 +21,7 @@ export async function loginVerification(email: string, password: string): Promis
     // Return a valid LoginVerification object
     return {
       isLoggedIn: true,
-      token: data.token,
+      _token: data.token,
       errorMessage: ''
     };
   } catch (error: unknown) {
@@ -29,7 +29,7 @@ export async function loginVerification(email: string, password: string): Promis
     if (error instanceof Error) {
       return {
         isLoggedIn: false,
-        token: '',
+        _token: '',
         errorMessage: error.message
       };
     } else {

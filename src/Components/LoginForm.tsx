@@ -1,14 +1,16 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import Spinner from './Spinner';
 import { loginVerification } from '../utils/loginVerification';
+import { AppContext } from '../DataLayer/DataProviders/AppProvider';
 
 function LoginForm() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-// Login Handler Function
+  const [{ token }, appDispatch] = useContext(AppContext);
+  console.log(token);
+  // Login Handler Function =======
   async function handleLogin(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     const emailVal = (emailRef.current?.value)?.trim().toLowerCase();
@@ -19,21 +21,23 @@ function LoginForm() {
 
     setIsLoading(true);
     try {
-      const { isLoggedIn, token, errorMessage } = await loginVerification(emailVal, passwordVal);
+      const { isLoggedIn, _token, errorMessage } = await loginVerification(emailVal, passwordVal);
       setIsLoading(false);
-// Handle Login Failure Messages
+      // Handle Login Failure Messages =======
       if (!isLoggedIn) {
         setErrorMessage(errorMessage);
-        if(passwordRef.current) passwordRef.current.value = ''; // Reset password input
+        // Reset password input =======
+        if (passwordRef.current) passwordRef.current.value = '';
       } else {
-// Handle Successful Login
-        if(isLoggedIn){
-        // ============= Save the token in Context store Token variable =================
+        // Handle Successful Login =======
+        if (isLoggedIn) {
+          setErrorMessage('');
+          //  Saving the token in AppContext ===== =======
+          appDispatch({ type: "UPDATE_TOKEN", payload: _token });
         }
       }
     } catch (error) {
       console.error(error);
-      // Handle error
     }
   }
 
@@ -54,7 +58,7 @@ function LoginForm() {
             placeholder="Enter email"
             ref={emailRef}
           />
-         </div>
+        </div>
       </div>
 
       <div>
