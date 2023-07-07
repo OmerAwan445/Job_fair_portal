@@ -1,11 +1,10 @@
-// import { url } from "inspector";
 import React from "react";
 import NewAccPageIm from "../Imgs/NewAccPageIm.png";
 import SignupForm from "../Components/SignupForm";
 
-function NewAccount() {
+function SignUp() {
   return (
-    <section className="bg-white dark:bg-gray-900">
+    <section className="bg-white dark:bg-gray-900 relative">
       <div className="flex justify-center min-h-screen">
         <div
           className="hidden bg-cover lg:block lg:w-2/5"
@@ -34,4 +33,4 @@ function NewAccount() {
     </section>
   );
 }
-export default NewAccount;
+export default SignUp;

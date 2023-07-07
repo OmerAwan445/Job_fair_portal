@@ -2,6 +2,7 @@ import React, { useContext, useRef, useState } from 'react'
 import Spinner from './Spinner';
 import { loginVerification } from '../utils/loginVerification';
 import { AppContext } from '../DataLayer/DataProviders/AppProvider';
+import { Link } from 'react-router-dom';
 
 function LoginForm() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -85,7 +86,7 @@ function LoginForm() {
 
       <p className="text-center text-sm text-gray-500">
         No account?&nbsp;
-        <a className="underline text-blue-400" href="##">Sign up</a>
+        <Link className="underline text-blue-400" to='/sign-up'>Sign up</Link>
       </p>
     </form>
   )

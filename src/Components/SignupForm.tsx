@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SignupFormData } from "../Types";
-import { AccountCreationVerification } from "../utils/AccountCreationVerification";
+import { accountCreationVerification } from "../utils/accountCreationVerification";
+import { useNavigate } from "react-router";
 
 
 function SignupForm() {
@@ -12,8 +13,26 @@ function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [responseStatus, setResponseStatus] = useState("");
+  const [responseMessage, setResponseMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  useEffect(()=>{
+  if(responseStatus === "") return
+  if(responseStatus==="Error"){
+    const timeout = setTimeout(()=>{
+    setResponseMessage("");
+  },3000);
+  return () => clearTimeout(timeout);
+  }
+  setTimeout(()=>{
+    navigate('/login')
+  },2000)
+},[responseStatus,navigate]);
+
+
+ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (
       !firstName ||
@@ -49,7 +68,6 @@ function SignupForm() {
       !numberRegex.test(password) ||
       !specialCharRegex.test(password)
     ) {
-      console.log(specialCharRegex.test(password));
       setPasswordError(
         "*Password must contain at least one uppercase letter, one number, and one special character"
       );
@@ -71,12 +89,11 @@ function SignupForm() {
       email,
       password,
     };
-
-    console.log("Form Data:", formData);
-    // Perform further processing with the form data
-  AccountCreationVerification(formData);
-
-    // Ressetting all input fields
+  // Verifiying the user data
+ const {status,message} = await accountCreationVerification(formData);
+ setResponseStatus(status);
+ setResponseMessage(message);
+// Ressetting all input fields ===========
     setFirstName("");
     setLastName("");
     setGender(-1);
@@ -87,7 +104,7 @@ function SignupForm() {
     setPasswordError("");
   };
 
-  // Input Fields Handlers
+  // Input Fields Handlers ===========
   const handleFirstNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -105,6 +122,7 @@ function SignupForm() {
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
+    setEmailError("");
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,11 +132,13 @@ function SignupForm() {
   const handleConfirmPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setConfirmPassword(event.target.value);
-  };
+  setConfirmPassword(event.target.value);
+  setPasswordError("");
+};
 
   return (
     <div>
+      {responseMessage && <div className={`${responseStatus ==="Error" ? "bg-red-600":"bg-green-600" } absolute top-0 w-32 mx-auto`}><h3>{responseMessage}</h3></div>}
       <form
         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2"
         onSubmit={handleFormSubmit}
@@ -169,7 +189,7 @@ function SignupForm() {
               Select one of the options
             </option>
             <option value="1">Male</option>
-            <option value="2">Female</option>
+            <option value="0">Female</option>
           </select>
         </div>
 
