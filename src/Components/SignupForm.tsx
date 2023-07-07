@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SignUpFormData } from "../Types";
 import { signUpVerification } from "../utils/signUpVerification";
 import { useNavigate } from "react-router";
+import Spinner from "./Spinner";
 
 
 function SignUpForm() {
@@ -19,7 +20,10 @@ function SignUpForm() {
   const [passwordError, setPasswordError] = useState("");
   const [genderError, setGenderError] = useState("");
 
-  // response states
+// Loading state
+   const [isLoading, setIsLoading] = useState(false);
+  
+   // response states
   const [responseStatus, setResponseStatus] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
 
@@ -94,6 +98,7 @@ function SignUpForm() {
       return;
     }
 
+    setIsLoading(true);
     const formData: SignUpFormData = {
       firstName,
       lastName,
@@ -101,10 +106,15 @@ function SignUpForm() {
       email,
       password,
     };
+
   // Verifying the user data
  const {status,message} = await signUpVerification(formData);
  setResponseStatus(status);
  setResponseMessage(message);
+ 
+ if (status){
+  setIsLoading(false);
+ }
 // Resetting all input fields ===========
     setFirstName("");
     setLastName("");
@@ -265,7 +275,7 @@ function SignUpForm() {
           className="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
           type="submit"
         >
-          <span>Sign Up </span>
+          <span>{isLoading ? <Spinner /> : "Sign Up"} </span>
 
           <svg
             xmlns="http://www.w3.org/2000/svg"
