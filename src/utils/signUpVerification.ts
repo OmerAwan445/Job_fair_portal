@@ -1,7 +1,7 @@
 import axios from "axios";
-import { SignupFormData } from "../Types";
+import { SignUpFormData } from "../Types";
 
-export async function accountCreationVerification(formdata: SignupFormData): Promise<{ status: string, message: string }> {
+export async function signUpVerification(formData: SignUpFormData): Promise<{ status: string, message: string }> {
   const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
   try {
     if (!BASE_URL) throw new Error('No API ENDPOINT FOUND');
@@ -9,7 +9,7 @@ export async function accountCreationVerification(formdata: SignupFormData): Pro
       'accept': '*/*',
       'Content-Type': 'application/json'
     };
-    const { data } = await axios.post(`${BASE_URL}/auth/Register`, formdata, { headers });
+    const { data } = await axios.post(`${BASE_URL}/auth/Register`, formData, { headers });
     // Return the data value
     return data.value;
   } catch (error) {

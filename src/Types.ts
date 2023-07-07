@@ -1,3 +1,4 @@
+// LoginVerification 
 export interface LoginVerification {
     isLoggedIn: boolean,
     _token: string,
@@ -8,7 +9,16 @@ export interface AppContextInitialState {
     token: string
 }
 
-/* export interface PersonalInfoContext {
+// SignUpVerification
+export interface SignUpFormData {
+    firstName: string;
+    lastName: string;
+    gender: number;
+    email: string;
+    password: string;
+  }
+
+  /* export interface PersonalInfoContext {
     email: string,
     departmentId:number,
     registration:string,
@@ -19,24 +29,3 @@ export interface AppContextInitialState {
     summary:string,
     file:string
 } */
-export interface AccountCreationVerification{
- isCreate?: boolean;
- errorMessage?: string;
-}
-
-
-export interface NewAccountData
-{
-    firstName: string,
-    lastName: string,
-    gender: BigInteger,
-    email: string,
-    password: string,
-}
-export interface SignupFormData {
-    firstName: string;
-    lastName: string;
-    gender: number;
-    email: string;
-    password: string;
-  }

@@ -1,6 +1,6 @@
 import React from "react";
-import NewAccPageIm from "../Imgs/NewAccPageIm.png";
-import SignupForm from "../Components/SignupForm";
+import NewAccPageIm from "../Images/NewAccPageIm.png";
+import SignUpForm from "../Components/SignUpForm";
 
 function SignUp() {
   return (
@@ -26,7 +26,7 @@ function SignUp() {
               and begin setting up your resume.
             </p>
             {/* form  */}
-          <SignupForm/>
+          <SignUpForm/>
           </div>
         </div>
       </div>

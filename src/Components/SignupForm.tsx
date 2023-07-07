@@ -1,38 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { SignupFormData } from "../Types";
-import { accountCreationVerification } from "../utils/accountCreationVerification";
+import { SignUpFormData } from "../Types";
+import { signUpVerification } from "../utils/signUpVerification";
 import { useNavigate } from "react-router";
+import Spinner from "./Spinner";
 
-
-function SignupForm() {
+function SignUpForm() {
+  // form inputs states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState(-1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // error states
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [genderError, setGenderError] = useState("");
+
+  // response states
   const [responseStatus, setResponseStatus] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
   const navigate = useNavigate();
 
+  // for the Spinner
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(()=>{
-  if(responseStatus === "") return
-  if(responseStatus==="Error"){
-    const timeout = setTimeout(()=>{
-    setResponseMessage("");
-  },3000);
-  return () => clearTimeout(timeout);
-  }
-  setTimeout(()=>{
-    navigate('/login')
-  },2000)
-},[responseStatus,navigate]);
+  // useEffect for the response conformations
+  useEffect(() => {
+    if (responseStatus === "") return;
+    if (responseStatus === "Error") {
+      const timeout = setTimeout(() => {
+        setResponseMessage("");
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
+  }, [responseStatus, navigate]);
 
+  const handleButtonClick = () => {
+    setIsLoading(true);
+  };
 
- const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  // classes for the inputs
+  const tailwindInputClasses = `block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-white-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40`;
+
+  const tailwindBtnClasses = `flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50`;
+
+  const tailwindLabelClasses = `block mb-2 text-sm text-gray-600 dark:text-gray-200`;
+
+  // form submission handler event===============================================================
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (
       !firstName ||
@@ -42,18 +62,25 @@ function SignupForm() {
       !password ||
       !confirmPassword
     ) {
+      // special case for the Gender field
+      setGenderError("*Please select a gender");
+      setIsLoading(false);
       // Handle the case when any field is empty
-      console.log("*Please fill in all the fields");
+
       return;
+    } else {
+    setGenderError(""); // Clear the gender error if no error
     }
 
     if (password !== confirmPassword) {
       setPasswordError("*Passwords do not match");
+      setIsLoading(false);
       return;
     }
 
     if (password.length < 8) {
       setPasswordError("*Password should be at least 8 characters long");
+      setIsLoading(false);
       return;
     }
 
@@ -71,6 +98,7 @@ function SignupForm() {
       setPasswordError(
         "*Password must contain at least one uppercase letter, one number, and one special character"
       );
+      setIsLoading(false);
       return;
     }
 
@@ -79,21 +107,24 @@ function SignupForm() {
 
     if (!lowercaseEmail.endsWith(lowercaseSuffix)) {
       setEmailError("*Email should end with @cuiatd.edu.pk");
+      setIsLoading(false);
       return;
     }
 
-    const formData: SignupFormData = {
+    const formData: SignUpFormData = {
       firstName,
       lastName,
       gender,
       email,
       password,
     };
-  // Verifiying the user data
- const {status,message} = await accountCreationVerification(formData);
- setResponseStatus(status);
- setResponseMessage(message);
-// Ressetting all input fields ===========
+    // Verifying the user data
+    const { status, message } = await signUpVerification(formData);
+    setResponseStatus(status);
+    setResponseMessage(message);
+    setIsLoading(false);
+
+    // Resetting all input fields ===========
     setFirstName("");
     setLastName("");
     setGender(-1);
@@ -116,8 +147,11 @@ function SignupForm() {
   };
 
   const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = Number(event.target.value);
-    setGender(value);
+    const selectedGender = Number(event.target.value);
+    console.log(selectedGender);
+    
+    setGender(selectedGender);
+    setGenderError("");
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,25 +166,34 @@ function SignupForm() {
   const handleConfirmPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-  setConfirmPassword(event.target.value);
-  setPasswordError("");
-};
+    setConfirmPassword(event.target.value);
+    setPasswordError("");
+  };
 
   return (
     <div>
-      {responseMessage && <div className={`${responseStatus ==="Error" ? "bg-red-600":"bg-green-600" } absolute top-0 w-32 mx-auto`}><h3>{responseMessage}</h3></div>}
+      {responseMessage && (
+        <div className="relative">
+          <button
+            className={`${
+            responseStatus === "Error" ? "bg-red-600" : "bg-green-600"
+          } text-white px-4 py-2 rounded-md absolute right-0 top-0`}
+          >
+            {responseMessage}
+          </button>
+          
+        </div>
+      )}
       <form
         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2"
         onSubmit={handleFormSubmit}
       >
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            First Name
-          </label>
+          <label className={tailwindLabelClasses}>First Name</label>
           <input
             type="text"
             placeholder="John"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={firstName}
             onChange={handleFirstNameChange}
             required
@@ -158,49 +201,42 @@ function SignupForm() {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Last name
-          </label>
+          <label className={tailwindLabelClasses}>Last name</label>
           <input
             type="text"
             placeholder="Snow"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-            value={lastName}
+            className={tailwindInputClasses}
             onChange={handleLastNameChange}
             required
           />
         </div>
 
         <div>
-          <label
-            htmlFor="gender"
-            className="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-          >
+          <label htmlFor="gender" className={tailwindLabelClasses}>
             Gender
           </label>
           <select
             id="gender"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={gender}
             onChange={handleGenderChange}
             required
           >
-            <option value="-1" disabled hidden  style={{color:"#4b5552"}}>
+            <option value="-1" disabled hidden style={{ color: "#4b5552" }}>
               Select one of the options
             </option>
             <option value="1">Male</option>
             <option value="0">Female</option>
           </select>
+          {genderError && <p className="text-red-500 mt-1">{genderError}</p>}
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Email address
-          </label>
+          <label className={tailwindLabelClasses}>Email address</label>
           <input
             type="email"
-            placeholder="johnsnow@atdstudent.cui.edu.pk"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            placeholder="johnsnow@cuiatd.edu.pk"
+            className={tailwindInputClasses}
             value={email}
             onChange={handleEmailChange}
             required
@@ -209,13 +245,11 @@ function SignupForm() {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Password
-          </label>
+          <label className={tailwindLabelClasses}>Password</label>
           <input
             type="password"
             placeholder="Enter your password"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={password}
             onChange={handlePasswordChange}
             required
@@ -223,13 +257,11 @@ function SignupForm() {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-            Confirm password
-          </label>
+          <label className={tailwindLabelClasses}>Confirm password</label>
           <input
             type="password"
             placeholder="Enter your password"
-            className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+            className={tailwindInputClasses}
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
             required
@@ -240,10 +272,11 @@ function SignupForm() {
         </div>
 
         <button
-          className="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+          onClick={handleButtonClick}
+          className={tailwindBtnClasses}
           type="submit"
         >
-          <span>Sign Up </span>
+          <span>{isLoading ? <Spinner /> : "Sign Up"} </span>
 
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -263,4 +296,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default SignUpForm;
