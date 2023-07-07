@@ -3,6 +3,7 @@ import { SignUpFormData } from "../Types";
 import { signUpVerification } from "../utils/signUpVerification";
 import { useNavigate } from "react-router";
 import Spinner from "./Spinner";
+import { Link } from "react-router-dom";
 
 
 function SignUpForm() {
@@ -285,6 +286,13 @@ const tailwindLabelClasses = `block mb-2 text-sm text-gray-600 dark:text-gray-20
           <h3>*{responseMessage}</h3>
         </div>
       )}
+      <br /><br />
+      <Link
+        to="/login"
+        className=" text-blue-300 dark:text-blue-300 underline transition-all duration-100 hover:text-blue-400 object-right-bottom mx-auto my-20"
+      >
+        Already got a account?
+      </Link>
     </div>
   );
 }

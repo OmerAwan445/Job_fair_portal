@@ -90,7 +90,10 @@ function LoginForm() {
 
       <p className="text-center text-sm text-gray-500">
         No account?&nbsp;
-        <Link className="underline text-blue-400" to="/sign-up">
+        <Link
+          className=" text-blue-300 dark:text-blue-300 underline transition-all duration-100 hover:text-blue-400"
+          to="/sign-up"
+        >
           Sign up
         </Link>
       </p>
