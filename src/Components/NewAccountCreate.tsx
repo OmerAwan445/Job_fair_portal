@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AccountCreationVerification,NewAccountData } from "../Types";
 
 
 interface FormData {
@@ -46,11 +47,28 @@ function NewAccountCreate() {
       return;
     }
 
+    // Password validation regex patterns
+    const uppercaseRegex = /^(?=.*[A-Z])/;
+    const numberRegex = /^(?=.*\d)/;
+    const specialCharRegex = /^(?=.*[!@#$%^&*])/;
+
+    // Check if the password meets the criteria
+    if (
+      !uppercaseRegex.test(password) ||
+      !numberRegex.test(password) ||
+      !specialCharRegex.test(password)
+    ) {
+      setPasswordError(
+        "Password must contain at least one uppercase letter, one number, and one special character"
+      );
+      return;
+    }
+
     const lowercaseEmail = email.toLowerCase();
-    const lowercaseSuffix = "@atdstudent.cui.edu.pk";
+    const lowercaseSuffix = "@cuiatd.edu.pk";
 
     if (!lowercaseEmail.endsWith(lowercaseSuffix)) {
-      setEmailError("Email should end with @atdstudent.cui.edu.pk");
+      setEmailError("Email should end with @cuiatd.edu.pk");
       return;
     }
 
