@@ -33,7 +33,7 @@ export interface NewAccountData
     email: string,
     password: string,
 }
-export interface SignupFormData {
+export interface SignUpFormData {
     firstName: string;
     lastName: string;
     gender: number;

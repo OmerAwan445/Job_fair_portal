@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { SignupFormData } from "../Types";
-import { accountCreationVerification } from "../utils/accountCreationVerification";
+import { SignUpFormData } from "../Types";
+import { signUpVerification } from "../utils/signUpVerification";
 import { useNavigate } from "react-router";
 
 
@@ -82,7 +82,7 @@ function SignupForm() {
       return;
     }
 
-    const formData: SignupFormData = {
+    const formData: SignUpFormData = {
       firstName,
       lastName,
       gender,
@@ -90,7 +90,7 @@ function SignupForm() {
       password,
     };
   // Verifiying the user data
- const {status,message} = await accountCreationVerification(formData);
+ const {status,message} = await signUpVerification(formData);
  setResponseStatus(status);
  setResponseMessage(message);
 // Ressetting all input fields ===========
