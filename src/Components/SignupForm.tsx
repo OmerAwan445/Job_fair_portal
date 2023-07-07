@@ -1,16 +1,10 @@
-import React, { useState } from "react";
-import { AccountCreationVerification, NewAccountData } from "../Types";
+import React, { useEffect, useState } from "react";
+import { SignupFormData } from "../Types";
+import { accountCreationVerification } from "../utils/accountCreationVerification";
+import { useNavigate } from "react-router";
 
-interface FormData {
-  firstName: string;
-  lastName: string;
-  gender: number;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 
-function NewAccountCreate() {
+function SignupForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState(-1);
@@ -19,11 +13,27 @@ function NewAccountCreate() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [genderError, setGenderError] = useState("");
+  const [responseStatus, setResponseStatus] = useState("");
+  const [responseMessage, setResponseMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  useEffect(()=>{
+  if(responseStatus === "") return
+  if(responseStatus==="Error"){
+    const timeout = setTimeout(()=>{
+    setResponseMessage("");
+  },3000);
+  return () => clearTimeout(timeout);
+  }
+  setTimeout(()=>{
+    navigate('/login')
+  },2000)
+},[responseStatus,navigate]);
+
+
+ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (
       !firstName ||
       !lastName ||
@@ -33,18 +43,17 @@ function NewAccountCreate() {
       !confirmPassword
     ) {
       // Handle the case when any field is empty
-      console.log("Please fill in all the fields");
-      setGenderError("Please select a gender");
+      console.log("*Please fill in all the fields");
       return;
-    } else setGenderError("");
+    }
 
     if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
+      setPasswordError("*Passwords do not match");
       return;
     }
 
     if (password.length < 8) {
-      setPasswordError("Password should be at least 8 characters long");
+      setPasswordError("*Password should be at least 8 characters long");
       return;
     }
 
@@ -60,31 +69,31 @@ function NewAccountCreate() {
       !specialCharRegex.test(password)
     ) {
       setPasswordError(
-        "Password must contain at least one uppercase letter, one number, and one special character"
+        "*Password must contain at least one uppercase letter, one number, and one special character"
       );
       return;
     }
 
-    const lowercaseEmail = email.toLowerCase();
+    const lowercaseEmail = email.toLowerCase().trim();
     const lowercaseSuffix = "@cuiatd.edu.pk";
 
     if (!lowercaseEmail.endsWith(lowercaseSuffix)) {
-      setEmailError("Email should end with @cuiatd.edu.pk");
+      setEmailError("*Email should end with @cuiatd.edu.pk");
       return;
     }
 
-    const formData: FormData = {
+    const formData: SignupFormData = {
       firstName,
       lastName,
       gender,
       email,
       password,
-      confirmPassword,
     };
-
-    console.log("Form Data:", formData);
-    // Perform further processing with the form data
-
+  // Verifiying the user data
+ const {status,message} = await accountCreationVerification(formData);
+ setResponseStatus(status);
+ setResponseMessage(message);
+// Ressetting all input fields ===========
     setFirstName("");
     setLastName("");
     setGender(-1);
@@ -95,6 +104,7 @@ function NewAccountCreate() {
     setPasswordError("");
   };
 
+  // Input Fields Handlers ===========
   const handleFirstNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -105,15 +115,14 @@ function NewAccountCreate() {
     setLastName(event.target.value);
   };
 
- const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-   const selectedGender = parseInt(event.target.value, 10);
-   setGender(selectedGender);
-   setGenderError(""); // Clear the gender error when the value changes
- };
-
+  const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(event.target.value);
+    setGender(value);
+  };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
+    setEmailError("");
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,11 +132,13 @@ function NewAccountCreate() {
   const handleConfirmPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setConfirmPassword(event.target.value);
-  };
+  setConfirmPassword(event.target.value);
+  setPasswordError("");
+};
 
   return (
     <div>
+      {responseMessage && <div className={`${responseStatus ==="Error" ? "bg-red-600":"bg-green-600" } absolute top-0 w-32 mx-auto`}><h3>{responseMessage}</h3></div>}
       <form
         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2"
         onSubmit={handleFormSubmit}
@@ -174,13 +185,12 @@ function NewAccountCreate() {
             onChange={handleGenderChange}
             required
           >
-            <option value="-1" disabled hidden style={{ color: "#4b5552" }}>
+            <option value="-1" disabled hidden  style={{color:"#4b5552"}}>
               Select one of the options
             </option>
             <option value="1">Male</option>
-            <option value="2">Female</option>
+            <option value="0">Female</option>
           </select>
-          {genderError && <p className="text-red-500 mt-1">{genderError}</p>}
         </div>
 
         <div>
@@ -253,4 +263,4 @@ function NewAccountCreate() {
   );
 }
 
-export default NewAccountCreate;
+export default SignupForm;
