@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Login from "./Pages/Login";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import SignUp from "./Pages/SignUp";
 
 function App() {
  return (
@@ -8,6 +9,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Root />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/sign-up" element={<SignUp />} />
      </Routes>
      </>
   );
