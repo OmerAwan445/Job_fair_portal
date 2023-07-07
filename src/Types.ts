@@ -19,3 +19,24 @@ export interface AppContextInitialState {
     summary:string,
     file:string
 } */
+export interface AccountCreationVerification{
+ isCreate?: boolean;
+ errorMessage?: string;
+}
+
+
+export interface NewAccountData
+{
+    firstName: string,
+    lastName: string,
+    gender: BigInteger,
+    email: string,
+    password: string,
+}
+export interface SignupFormData {
+    firstName: string;
+    lastName: string;
+    gender: number;
+    email: string;
+    password: string;
+  }
