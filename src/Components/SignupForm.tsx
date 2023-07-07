@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+// import { AccountCreationVerification,NewAccountData } from "../Types";
 
 
 interface SignupFormData {
   firstName: string;
   lastName: string;
-  gender: string;
+  gender: number;
   email: string;
   password: string;
   confirmPassword: string;
@@ -13,7 +14,7 @@ interface SignupFormData {
 function SignupForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState(-1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -46,9 +47,9 @@ function SignupForm() {
     }
 
     // Password validation regex patterns
-    const uppercaseRegex = /^(?=.[A-Z])/;
-    const numberRegex = /^(?=.\d)/;
-    const specialCharRegex = /^(?=.[!@#$%^&])/;
+    const uppercaseRegex = /^(?=.*[A-Z])/;
+    const numberRegex = /^(?=.*\d)/;
+    const specialCharRegex = /^(?=.*[!@#$%^&*])/;
 
     // Check if the password meets the criteria
     if (
@@ -85,7 +86,7 @@ function SignupForm() {
 
     setFirstName("");
     setLastName("");
-    setGender("");
+    setGender(-1);
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -105,7 +106,8 @@ function SignupForm() {
   };
 
   const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setGender(event.target.value);
+    const value = Number(event.target.value);
+    setGender(value);
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {

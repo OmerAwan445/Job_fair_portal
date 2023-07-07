@@ -23,8 +23,7 @@ catch (error: unknown) {
     console.error(error);
     if (error instanceof Error) {
       return {
-        isLoggedIn: false,
-        token: '',
+        isCreate: false,
         errorMessage: error.message
       };
     } else {
