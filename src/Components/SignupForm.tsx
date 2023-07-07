@@ -17,6 +17,7 @@ function SignUpForm() {
   // error states
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [genderError, setGenderError] = useState("");
 
   // response states
   const [responseStatus, setResponseStatus] = useState("");
@@ -53,9 +54,11 @@ function SignUpForm() {
     ) {
       // Handle the case when any field is empty
       console.log("*Please fill in all the fields");
+       setGenderError("Please select a gender");
       return;
+    }else {
+      setGenderError("");
     }
-
     if (password !== confirmPassword) {
       setPasswordError("*Passwords do not match");
       return;
@@ -127,6 +130,7 @@ function SignUpForm() {
   const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = Number(event.target.value);
     setGender(value);
+    setGenderError("");
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +151,15 @@ function SignUpForm() {
 
   return (
     <div>
-      {responseMessage && <div className={`${responseStatus ==="Error" ? "bg-red-600":"bg-green-600" } absolute top-0 w-32 mx-auto`}><h3>{responseMessage}</h3></div>}
+      {responseMessage && (
+        <div
+          className={`${
+            responseStatus === "Error" ? "bg-red-600" : "bg-green-600"
+          } absolute top-0 w-32 mx-auto`}
+        >
+          <h3>{responseMessage}</h3>
+        </div>
+      )}
       <form
         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2"
         onSubmit={handleFormSubmit}
@@ -194,12 +206,13 @@ function SignUpForm() {
             onChange={handleGenderChange}
             required
           >
-            <option value="-1" disabled hidden  style={{color:"#4b5552"}}>
+            <option value="-1" disabled hidden style={{ color: "#4b5552" }}>
               Select one of the options
             </option>
             <option value="1">Male</option>
             <option value="0">Female</option>
           </select>
+          {genderError && <p className="text-red-500 mt-1">{genderError}</p>}
         </div>
 
         <div>
