@@ -2,15 +2,16 @@ import React, { useContext, useRef, useState } from 'react'
 import Spinner from './Spinner';
 import { loginVerification } from '../utils/loginVerification';
 import { AppContext } from '../DataLayer/DataProviders/AppProvider';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { getAccountRole } from '../utils/getAccountRole';
 function LoginForm() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [{ token }, appDispatch] = useContext(AppContext);
-  console.log(token);
+  const [ , appDispatch] = useContext(AppContext);
+ const navigate = useNavigate();
+
   // Login Handler Function =======
   async function handleLogin(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -33,8 +34,17 @@ function LoginForm() {
         // Handle Successful Login =======
         if (isLoggedIn) {
           setErrorMessage('');
-          //  Saving the token in AppContext ===== =======
+          //  Saving the token in AppContext ============
           appDispatch({ type: "UPDATE_TOKEN", payload: _token });
+          const accountRole = getAccountRole(_token);
+          if(accountRole === "User"){
+        // Navigate user to the Dashboard
+        navigate('/dashboard', { replace: true });
+          }
+  /* ============== Make the Admin Route here =================== */
+          else{
+            return;
+          }
         }
       }
     } catch (error) {

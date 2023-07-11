@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SignupFormData } from "../Types";
 import { accountCreationVerification } from "../utils/accountCreationVerification";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 
 function SignupForm() {
@@ -258,6 +259,8 @@ function SignupForm() {
             />
           </svg>
         </button>
+        <br/>
+        <Link to='/login' className="text-sm text-blue-600 underline">Already have and Account?</Link>
       </form>
     </div>
   );

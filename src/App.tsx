@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Login from "./Pages/Login";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import SignUp from "./Pages/SignUp";
+import Dashboard from "./Pages/Dashboard";
 
 function App() {
  return (
@@ -10,6 +11,7 @@ function App() {
       <Route path="/" element={<Root />} />
       <Route path="/login" element={<Login />} />
       <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/dashboard" element={<Dashboard />} />
      </Routes>
      </>
   );

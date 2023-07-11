@@ -14,7 +14,6 @@ export async function loginVerification(email: string, password: string): Promis
       password
     };
     const { data } = await axios.post(`${BASE_URL}/auth/login`, userData, { headers });
-console.log(data);
     // Means the email or password was wrong
     if (data.statusCode === 401) throw new Error('Invalid email or password');
 
